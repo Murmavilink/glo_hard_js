@@ -1,17 +1,32 @@
 'use strict';
 
+let price;
 
-const strHandler = (arg) => {
-
-    if(typeof arg === 'string') {
-        let str = arg.trim();
-
-        return str.length > 15 ? str = str.substring(0, 15) + '...' : str;
- 
-    } else {
-        console.log('Не строка!');
+const isNumber = function(num) {
+    let priceNum;
+    
+    if(num === null) {
+        return false;
     }
 
+    priceNum = num.trim();
+    
+    if(!isNaN( parseFloat(priceNum) ) && isFinite(priceNum)) {
+        return price = priceNum;
+    }
+    
 };
 
-console.log( strHandler('Hello my freinds and cat') );
+
+do {
+    price = prompt('Введите число!');
+} while(!isNumber(price));
+
+
+if(isNumber(price)) {
+    console.log(price, 'ok');
+} else {
+    console.log('Не число!!!');
+}
+
+
