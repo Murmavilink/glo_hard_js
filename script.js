@@ -1,31 +1,50 @@
 'use strict';
 
-// 1
-const input = document.querySelector('input[type=text]');
-const p = document.querySelector('p');
 
-const showText = (value) => {
-    p.textContent = value;
+const start = document.querySelector('.start');
+const reset = document.querySelector('.reset');
+
+const airplane = document.querySelector('.airplane');
+const santa = document.querySelector('.man');
+
+let idInterval;
+let count = 0;
+
+const flyAnimate = () => {
+    count++;
+
+    idInterval = requestAnimationFrame(flyAnimate);
+    
+    if(count < 200) {
+        santa.style.top = count + 'px';
+        airplane.style.left = count * 3 + 'px';
+    } else if(count < 400) {
+        airplane.style.left = count * 3 + 'px';   
+    } else {
+        cancelAnimationFrame(idInterval);
+    }
 };
 
-input.addEventListener('input', () => {
-    setTimeout(showText, 300, input.value);
+
+start.addEventListener('click', () => {
+    idInterval = requestAnimationFrame(flyAnimate);
+    addNoneBlock(start, reset);
 });
+ 
+
+reset.addEventListener('click', () => {   
+    cancelAnimationFrame(idInterval);
+    count = 0;
+    santa.style.top = count;
+    airplane.style.left = count;
+
+    addNoneBlock(reset, start);
+});
+ 
 
 
-// 2
-// const input = document.getElementById('input');
-// const text = document.getElementById('text');
 
-// function debounce(func, timeout) {
-//     return function (args) {
-//         let previousCall = this.lastCall;
-//         this.lastCall = Date.now();
-//         if (previousCall && ((this.lastCall - previousCall) <= timeout)) {
-//             clearTimeout(this.lastCallTimer);
-//         }
-//         this.lastCallTimer = setTimeout(() => func(args), timeout);
-//     };
-// }
-
-// input.addEventListener('input', debounce(() => { text.textContent = input.value; }, 300));
+const addNoneBlock = (btn1, btn2) => {
+    btn1.style.display = 'none';
+    btn2.style.display = 'block';
+};
