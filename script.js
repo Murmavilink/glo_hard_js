@@ -1,50 +1,50 @@
 'use strict';
 
 
-const start = document.querySelector('.start');
-const reset = document.querySelector('.reset');
 
-const airplane = document.querySelector('.airplane');
-const santa = document.querySelector('.man');
+const myHeaders = new Headers();
+myHeaders.append("apikey", "CZH8qJealtsViSl2N9NicLvlEKNRirA7");
+const inputAmount = document.getElementById('input');
+const form = document.getElementById('form');
+const spinner = document.getElementById('spinner');
 
-let idInterval;
-let count = 0;
+const requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: myHeaders
+};
 
-const flyAnimate = () => {
-    count++;
-
-    idInterval = requestAnimationFrame(flyAnimate);
-    
-    if(count < 200) {
-        santa.style.top = count + 'px';
-        airplane.style.left = count * 3 + 'px';
-    } else if(count < 400) {
-        airplane.style.left = count * 3 + 'px';   
-    } else {
-        cancelAnimationFrame(idInterval);
+const getResult = () => {
+    const amount = inputAmount.value;
+    const fromValue = document.getElementById('from').value;
+    const toValue = document.getElementById('to').value;
+    const resultInput = document.getElementById('result');
+    if (!amount) {
+        spinner.style.display = "none";
+        return;
     }
+
+    fetch(`https://api.apilayer.com/exchangerates_data/convert?to=${toValue}&from=${fromValue}&amount=${amount}`,
+        requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            spinner.style.display = "none";
+            resultInput.value = (result.result).toFixed(2);
+        })
+        .catch(error => console.log('error', error));
 };
 
-
-start.addEventListener('click', () => {
-    idInterval = requestAnimationFrame(flyAnimate);
-    addNoneBlock(start, reset);
+inputAmount.addEventListener('input', (e) => {
+    e.target.value = e.target.value.replace(/\D+/g, '');
 });
- 
 
-reset.addEventListener('click', () => {   
-    cancelAnimationFrame(idInterval);
-    count = 0;
-    santa.style.top = count;
-    airplane.style.left = count;
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    try {
+        spinner.style.display = "inline-block";
+        getResult();
+    } catch (error) {
+        console.log(error.message);
+    }
 
-    addNoneBlock(reset, start);
 });
- 
-
-
-
-const addNoneBlock = (btn1, btn2) => {
-    btn1.style.display = 'none';
-    btn2.style.display = 'block';
-};
