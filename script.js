@@ -1,17 +1,14 @@
 'use strict';
 
 
-const strHandler = (arg) => {
+const sliceStr = (str, num) => {
 
-    if(typeof arg === 'string') {
-        let str = arg.trim();
+    if (!isNaN(str)) return 'не строка';
 
-        return str.length > 15 ? str = str.substring(0, 15) + '...' : str;
- 
-    } else {
-        console.log('Не строка!');
-    }
+    const newStr = str.trim();
+
+    return newStr.length > num ? newStr.substring(0, num) + '...' : newStr;
 
 };
 
-console.log( strHandler('Hello my freinds and cat') );
+console.log( sliceStr('Hello my freinds and cat', 15) );
